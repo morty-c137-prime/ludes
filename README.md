@@ -1,4 +1,4 @@
-A simple and nice interace for working with CA in the terminal. 
+A simple and nice interace for working with CA in the terminal.
 
 ![alt text](http://www.conwaylife.com/w/images/3/31/Pentadecathlon.gif "Pentadecathlon")
 
