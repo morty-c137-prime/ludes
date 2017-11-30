@@ -1,0 +1,24 @@
+{
+  "name": "ludes",
+  "version": "1.0.0",
+  "description": "A CLI for Cellular Automata",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive ./test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morty-c137-prime/ludes.git"
+  },
+  "keywords": [
+    "life",
+    "cellular",
+    "automata"
+  ],
+  "author": "Richard Alvarez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/morty-c137-prime/ludes/issues"
+  },
+  "homepage": "https://github.com/morty-c137-prime/ludes#readme"
+}
