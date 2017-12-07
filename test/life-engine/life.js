@@ -7,6 +7,7 @@
 const expects              = require('chai').expect;
 const Life                 = require("../../lib/life-engine/life");
 const LifeConfiguration    = require("../../lib/life-engine/life-configuration");
+const Cell                 = require("../../lib/life-engine/cell");
 
 const the = it;
 
@@ -75,7 +76,7 @@ describe("Life", function()
 
 	});
 
-	describe("#getNeighbors", function()
+	/*describe("#getNeighbors", function()
 	{
 		let testBoard = [
 			[new Cell(0, 0), new Cell(1, 0, 1), new Cell(2, 0)],
@@ -95,6 +96,6 @@ describe("Life", function()
 		{
 			expects(fake.getNeighbors(1, 1)).is.equal(3);
 		});
-	});
+	});*/
 
 });
