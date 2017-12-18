@@ -45,6 +45,11 @@ describe("LifeConfiguration", function()
 			expects(function() {fake.rule = "ABCD"; }).to.throw(TypeError);
 		});
 
+		it("will be equal to '3/23'", function(){
+			expects(((fake)=>{fake.rule = "B3/S23"; return fake.rule; })(fake))
+					.to.equal("3/23");
+		});
+
 	})
 
 });
