@@ -6,6 +6,9 @@
   "scripts": {
     "test": "mocha --recursive ./test"
   },
+  "bin": {
+    "ludes": "./lib/ludes.js"    
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/morty-c137-prime/ludes.git"

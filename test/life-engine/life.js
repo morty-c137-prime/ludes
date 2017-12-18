@@ -90,24 +90,6 @@ describe("Life", function()
 
 	});
 
-	describe("#getCell", function()
-	{	
-		let fakeConfig = new LifeConfiguration();
-		let fake = new Life(fakeConfig);
-
-		it("will throw a TypeError if not passed two integers", function() 
-		{
-			expects(function() { fake.getCell('q', 'z'); }).to.throw(TypeError);
-		});
-
-		it("will return an empty cell at x and y (\"null cell\") if, x and y are out of bounds", function() 
-		{
-			expects(fake.getCell(-1, -1).x).is.equal(-1);
-			expects(fake.getCell(-1, -1).y).is.equal(-1);
-			expects(fake.getCell(-1, -1).state).is.equal(0);
-		});
-	});
-
 	describe("#getNeighbors", function()
 	{
 		it("will return neighbors", function()
