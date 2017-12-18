@@ -7,6 +7,7 @@
 const expects              = require('chai').expect;
 const Life                 = require("../../lib/life-engine/life");
 const LifeConfiguration    = require("../../lib/life-engine/life-configuration");
+const Cell                 = require("../../lib/life-engine/cell");
 
 const the = it;
 
@@ -26,7 +27,6 @@ describe("Life", function()
 	describe("#init", function()
 	{
 		let fakeConfig = new LifeConfiguration();
-		fakeConfig.rule = "123/123";
 		let fake = new Life(fakeConfig);
 		fake.init();
 
@@ -75,10 +75,77 @@ describe("Life", function()
 
 	});
 
+	describe("#getCell", function()
+	{	
+		let fakeConfig = new LifeConfiguration();
+		let fake = new Life(fakeConfig);
+
+		it("will throw a TypeError if not passed two integers", function() 
+		{
+			expects(function() { fake.getCell('q', 'z'); }).to.throw(TypeError);
+		});
+
+		it("will return an empty cell at x and y (\"null cell\") if, x and y are out of bounds", function() 
+		{
+			expects(fake.getCell(-1, -1).x).is.equal(-1);
+			expects(fake.getCell(-1, -1).y).is.equal(-1);
+			expects(fake.getCell(-1, -1).state).is.equal(0);
+		});
+	});
+
 	describe("#getNeighbors", function()
 	{
 		let testBoard = [
 			[new Cell(0, 0), new Cell(1, 0, 1), new Cell(2, 0)],
+			[new Cell(0, 1), new Cell(1, 1, 1), new Cell(2, 1)],
+			[new Cell(0, 2), new Cell(1, 2, 1), new Cell(2, 2)]
+		];
+
+		let fakeConfig = new LifeConfiguration();
+		fakeConfig.width = 3;
+		fakeConfig.height = 3;
+
+		let fake = new Life(fakeConfig);
+
+		fake.board = testBoard;
+
+		it("will return eight surrounding neighbors", function()
+		{
+			expects(fake.getNeighbors(0, 1).length).is.equal(5);
+		});
+	});
+
+	describe("#count", function()
+	{
+		let testBoard = [
+			[new Cell(0, 0), new Cell(1, 0, 1), new Cell(2, 0)],
+			[new Cell(0, 1), new Cell(1, 1, 1), new Cell(2, 1)],
+			[new Cell(0, 2), new Cell(1, 2, 1), new Cell(2, 2)]
+		];
+
+		let fakeConfig = new LifeConfiguration();
+		fakeConfig.width = 3;
+		fakeConfig.height = 3;
+
+		let fake = new Life(fakeConfig);
+
+		fake.board = testBoard;
+
+		it("will count 3 living cells", function()
+		{
+			expects(fake.count(fake.getNeighbors(0, 1))).to.equal(3);
+		});
+	});
+
+	describe("#iterate", function(){
+		let testBoard = [
+			[new Cell(0, 0), new Cell(1, 0, 1), new Cell(2, 0)],
+			[new Cell(0, 1), new Cell(1, 1, 1), new Cell(2, 1)],
+			[new Cell(0, 2), new Cell(1, 2, 1), new Cell(2, 2)]
+		];
+
+		let oneGen = [
+			[new Cell(0, 0), new Cell(1, 0), new Cell(2, 0)],
 			[new Cell(0, 1, 1), new Cell(1, 1), new Cell(2, 1, 1)],
 			[new Cell(0, 2), new Cell(1, 2), new Cell(2, 2)]
 		];
@@ -90,11 +157,9 @@ describe("Life", function()
 		let fake = new Life(fakeConfig);
 
 		fake.board = testBoard;
+		fake.iterate();
 
-		it("will return three neighbors", function()
-		{
-			expects(fake.getNeighbors(1, 1)).is.equal(3);
-		});
+		it("will return a correct first generation", function(){});
 	});
 
 });
