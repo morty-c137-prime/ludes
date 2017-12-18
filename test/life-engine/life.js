@@ -13,10 +13,30 @@ const the = it;
 
 describe("Life", function() 
 {
+	let testBoard, fakeConfig, fake, neighbors;
+
+	beforeEach(() =>
+	{
+		testBoard = [
+			[new Cell(0, 0), new Cell(0, 1), new Cell(0, 2)],
+			[new Cell(1, 0, 1), new Cell(1, 1, 1), new Cell(1, 2, 1)],
+			[new Cell(2, 0), new Cell(2, 1), new Cell(2, 2)]
+		];
+
+		fakeConfig = new LifeConfiguration();
+		fakeConfig.width = 3;
+		fakeConfig.height = 3;
+		fakeConfig.rule = "3/23";
+
+		fake = new Life(fakeConfig);
+
+		fake.board = testBoard;
+
+		neighbors = fake.getNeighbors(0, 0);
+	});
 
 	describe("#constructor", function()
 	{
-
 		it("will throw a TypeError if not passed a LifeConfiguration instance", function()
 		{
 			expects(function() { return new Life(); }).to.throw(TypeError);
@@ -26,12 +46,10 @@ describe("Life", function()
 
 	describe("#init", function()
 	{
-		let fakeConfig = new LifeConfiguration();
-		let fake = new Life(fakeConfig);
-		fake.init();
-
-		it("will build a board of size 8 by 8", function()
+		it("will build a board of size 3 by 3", function()
 		{
+			fake.board = [];
+			fake.init();
 			expects(fake.board.length).to.equal(fakeConfig.width);
 			expects(fake.board[0].length).to.equal(fakeConfig.height);
 		});
@@ -40,9 +58,6 @@ describe("Life", function()
 
 	describe("#isBounded", function()
 	{
-		let fakeConfig = new LifeConfiguration();
-		let fake = new Life(fakeConfig);
-
 		it("will throw a TypeError if not passed two integers", function() 
 		{
 			expects(function() { fake.isBounded('q', 'z'); }).to.throw(TypeError);
@@ -95,71 +110,55 @@ describe("Life", function()
 
 	describe("#getNeighbors", function()
 	{
-		let testBoard = [
-			[new Cell(0, 0), new Cell(1, 0, 1), new Cell(2, 0)],
-			[new Cell(0, 1), new Cell(1, 1, 1), new Cell(2, 1)],
-			[new Cell(0, 2), new Cell(1, 2, 1), new Cell(2, 2)]
-		];
-
-		let fakeConfig = new LifeConfiguration();
-		fakeConfig.width = 3;
-		fakeConfig.height = 3;
-
-		let fake = new Life(fakeConfig);
-
-		fake.board = testBoard;
-
-		it("will return eight surrounding neighbors", function()
+		it("will return neighbors", function()
 		{
-			expects(fake.getNeighbors(0, 1).length).is.equal(5);
+			expects(neighbors.length).is.equal(8);
 		});
+
 	});
 
 	describe("#count", function()
 	{
-		let testBoard = [
-			[new Cell(0, 0), new Cell(1, 0, 1), new Cell(2, 0)],
-			[new Cell(0, 1), new Cell(1, 1, 1), new Cell(2, 1)],
-			[new Cell(0, 2), new Cell(1, 2, 1), new Cell(2, 2)]
-		];
-
-		let fakeConfig = new LifeConfiguration();
-		fakeConfig.width = 3;
-		fakeConfig.height = 3;
-
-		let fake = new Life(fakeConfig);
-
-		fake.board = testBoard;
-
-		it("will count 3 living cells", function()
+		it("will count two living neighbors", function()
 		{
-			expects(fake.count(fake.getNeighbors(0, 1))).to.equal(3);
+			expects(fake.count(fake.getNeighbors(1, 1))).is.equal(2);
 		});
+
 	});
 
-	describe("#iterate", function(){
-		let testBoard = [
-			[new Cell(0, 0), new Cell(1, 0, 1), new Cell(2, 0)],
-			[new Cell(0, 1), new Cell(1, 1, 1), new Cell(2, 1)],
-			[new Cell(0, 2), new Cell(1, 2, 1), new Cell(2, 2)]
-		];
+	describe("#get", function()
+	{
+		it("will return true from 1, 0", function(){
+			expects(fake.get(1, 0).state).to.equal(1);
+		});
+		it("will return false from 0, 0", function(){
+			expects(fake.get(0, 0).state).to.equal(0);
+		});
 
-		let oneGen = [
-			[new Cell(0, 0), new Cell(1, 0), new Cell(2, 0)],
-			[new Cell(0, 1, 1), new Cell(1, 1), new Cell(2, 1, 1)],
-			[new Cell(0, 2), new Cell(1, 2), new Cell(2, 2)]
-		];
+	});
 
-		let fakeConfig = new LifeConfiguration();
-		fakeConfig.width = 3;
-		fakeConfig.height = 3;
+	describe("#set", function()
+	{
+		it("will change to dead at 1, 1", function(){
+			fake.set(1, 1, 0);
+			expects(fake.get(1, 1).state).to.equal(0);
+			fake.set(1, 1, 1);
+		});
 
-		let fake = new Life(fakeConfig);
+	});
 
-		fake.board = testBoard;
-		fake.iterate();
+	describe("#evolve", function(){
+		
+		before(()=>{
+			fake.evolve();
+		});
 
-		it("will return a correct first generation", function(){});
+		it("will properly evolve a period one oscillator in B3/S23", function()
+		{
+			expects(fake.get(1, 0).state).is.equal(1);
+			expects(fake.get(1, 1).state).is.equal(1);
+			expects(fake.get(1, 2).state).is.equal(1);
+		});
 	});
 
 });
